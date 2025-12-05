@@ -1,9 +1,10 @@
 import { DsText } from '@/components/ui/ds-text';
-import { Button, Icon, Input } from '@ui-kitten/components';
+import { Button, Input } from '@ui-kitten/components';
 import { router } from 'expo-router';
 import React, { Dispatch, ReactNode } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { IconSymbol } from '../icon-symbol';
 import { styles } from './styles';
 
 interface IDsPainel {
@@ -40,11 +41,7 @@ export default function DsPainel({
           onPress={() => router.back()}
           accessible={false}
         >
-          <Icon
-            name="arrow-ios-back-outline"
-            style={styles.iconBack}
-            fill="#00875F"
-          />
+          <IconSymbol size={28} name="arrow.backward" color="#00875F" />
         </TouchableWithoutFeedback>
       )}
 
@@ -61,11 +58,7 @@ export default function DsPainel({
           value={inputValue}
           size="large"
           accessoryRight={
-            <Icon
-              name="search-outline"
-              style={styles.inputIcon}
-              fill="#00875F"
-            />
+            <IconSymbol size={28} name="magnifyingglass" color="#00875F" />
           }
           returnKeyType="search"
           onChangeText={setInputValue}
