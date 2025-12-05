@@ -1,18 +1,30 @@
-## Começando
+## Executando o Projeto
 
-1. Instale as dependências:
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (versão 22+)
+- [PNPM](https://pnpm.io/)
+
+1. **Clone o repositório**
+   
+   ```bash
+   git clone https://github.com/bruno-bergamaschi/challenge-global-hitss-front.git
+   cd challenge-global-hitss-front
+   ```
+
+2. Instale as dependências:
 
    ```bash
    pnpm install
    ```
 
-2. Crie um arquivo .env na raiz do projeto:
+3. Crie um arquivo .env na raiz do projeto:
 
    ```bash
    API_URL="url_da_api"
    ```
 
-3. Inicie o app:
+4. Inicie o app:
 
    ```bash
    npx expo start
