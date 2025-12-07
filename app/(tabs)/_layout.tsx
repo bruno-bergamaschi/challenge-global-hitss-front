@@ -7,10 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export type TeamId = number | null;
 
@@ -25,7 +22,6 @@ export const AppContext = createContext<AppContextType>({
 });
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const [teamId, setTeamId] = useState<TeamId>(null);
 
   const value = useMemo<AppContextType>(
@@ -37,11 +33,16 @@ export default function TabLayout() {
     <AppContext.Provider value={value}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: '#00875F',
           headerShown: false,
-          tabBarButton: HapticTab,
           sceneStyle: {
-            padding: 20,
+            backgroundColor: '#202024',
+            paddingHorizontal: 20,
+            flex: 1,
+          },
+          tabBarStyle: {
+            backgroundColor: '#121214',
+            borderTopColor: '#121214',
           },
         }}
       >

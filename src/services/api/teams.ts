@@ -1,10 +1,10 @@
 import { api } from './client';
 
-export type Team = {
+export interface Team {
   id: number;
   name: string;
   color: string;
-};
+}
 
 type TeamsResponse = {
   results: Team[];
@@ -29,4 +29,12 @@ export async function getAllTeams({
   });
 
   return data;
+}
+
+export type CreateTeamBody = Pick<Team, 'name' | 'color'>;
+
+export async function createTeam(body: CreateTeamBody) {
+  const response = await api.post('/teams', body);
+
+  return response?.data;
 }

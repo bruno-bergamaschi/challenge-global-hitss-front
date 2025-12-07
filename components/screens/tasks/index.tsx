@@ -1,8 +1,10 @@
 import { DsText } from '@/components/ui/ds-text';
 import DsPainel from '@/components/ui/painel/ds-painel';
-import React, { useMemo } from 'react';
-import { ActivityIndicator, FlatList } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, FlatList, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CardTask } from './card-task';
+import { styles } from './styles';
 import { useTask } from './useTask';
 
 export function TasksScreen() {
@@ -11,48 +13,53 @@ export function TasksScreen() {
     hasNextPage,
     isFetchingNextPage,
     status,
-    data,
+    tasks,
     navigateToCreateTask,
+    refetch,
+    isRefetching,
   } = useTask();
 
-  const teams = useMemo(
-    () => (data ? data.pages.flatMap((p) => p.results) : []),
-    [data],
-  );
-
   return (
-    <DsPainel
-      title="Tarefas"
-      subtitle="Adicione a galera e separe os times"
-      showInput={false}
-      inputPlaceholder="Busque um time"
-      buttonAction={navigateToCreateTask}
-      buttonText="Criar tarefa"
-    >
-      {status === 'pending' && <ActivityIndicator />}
+    <SafeAreaView style={styles.container}>
+      <DsPainel
+        title="Tarefas"
+        subtitle="Adicione a galera e separe os times"
+        showInput={false}
+        inputPlaceholder="Busque um time"
+        buttonAction={navigateToCreateTask}
+        buttonText="Criar tarefa"
+      >
+        {status === 'pending' && <ActivityIndicator />}
 
-      <FlatList
-        data={teams}
-        renderItem={({ item }) => <CardTask task={item} key={item.id} />}
-        keyExtractor={(item) => String(item.id)}
-        showsVerticalScrollIndicator={false}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
+        <FlatList
+          data={tasks}
+          renderItem={({ item }) => <CardTask task={item} key={item.id} />}
+          keyExtractor={(item) => String(item.id)}
+          showsVerticalScrollIndicator={false}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={() => refetch()}
+            />
           }
-        }}
-        onEndReachedThreshold={0.6}
-        ListFooterComponent={() =>
-          isFetchingNextPage ? (
-            <ActivityIndicator style={{ marginVertical: 12 }} />
-          ) : null
-        }
-        ListEmptyComponent={() =>
-          status === 'success' && teams.length === 0 ? (
-            <DsText>Nenhum time encontrado</DsText>
-          ) : null
-        }
-      />
-    </DsPainel>
+          onEndReachedThreshold={0.6}
+          ListFooterComponent={() =>
+            isFetchingNextPage ? (
+              <ActivityIndicator style={{ marginVertical: 12 }} />
+            ) : null
+          }
+          ListEmptyComponent={() =>
+            status === 'success' && tasks.length === 0 ? (
+              <DsText>Nenhum time encontrado</DsText>
+            ) : null
+          }
+        />
+      </DsPainel>
+    </SafeAreaView>
   );
 }

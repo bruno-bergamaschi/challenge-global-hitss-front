@@ -5,12 +5,22 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
-  iconBack: {
-    width: 30,
-    height: 30,
+  content: {
+    flex: 1,
+    // justifyContent: 'space-between',
+  },
+  rowIconActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  iconRow: {
+    display: 'flex',
+    alignItems: 'center',
   },
   titleContainer: {
-    marginTop: 30,
+    marginTop: 50,
+    gap: 10,
   },
   title: {
     textAlign: 'center',
@@ -41,5 +51,9 @@ export const styles = StyleSheet.create({
   button: {
     backgroundColor: '#00875F',
     borderColor: '#00875F',
+  },
+  indicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

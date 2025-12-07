@@ -11,7 +11,12 @@ export function CardTask({ task }: { task: Task }) {
     <Card
       appearance="filled"
       style={styles.card}
-      onPress={() => router.push('/')}
+      onPress={() =>
+        router.push({
+          pathname: '/tasks/[id]',
+          params: { id: task.id },
+        })
+      }
     >
       <View style={styles.cardContent}>
         <View style={styles.cardContentTitle}>
@@ -23,7 +28,14 @@ export function CardTask({ task }: { task: Task }) {
             >
               {task.title}
             </DsText>
-            <DsText style={styles.subtitle}>{task.team.name}</DsText>
+            {task.teams.map((team) => (
+              <DsText
+                style={[styles.subtitle, { color: team.color }]}
+                key={team.id}
+              >
+                {team.name}
+              </DsText>
+            ))}
           </View>
           <Chip status={task.status} />
         </View>

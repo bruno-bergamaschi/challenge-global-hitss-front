@@ -1,31 +1,35 @@
-import { AppContext } from '@/app/(tabs)/_layout';
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
-import { getAllTasks, Task } from '@/src/services/api/tasks';
+import { getAllTeams, Team } from '@/src/services/api/teams';
 import { router, useNavigation } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export function useTask() {
+export function useTeams() {
+  const [inputValue, setInputValue] = useState('');
+  const [search, setSearch] = useState('');
   const [perPage, setPerPage] = useState(10);
-  const { teamId } = useContext(AppContext);
   const navigation = useNavigation();
 
   const {
-    items: tasks,
+    items: teams,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     status,
     refetch,
     isRefetching,
-  } = usePaginatedInfiniteQuery<Task, { teamId?: number | null }>({
+  } = usePaginatedInfiniteQuery<Team, { search?: string }>({
     queryKey: ['teams'],
-    fetchFn: getAllTasks,
-    params: { teamId },
+    fetchFn: getAllTeams,
+    params: { search },
     perPage,
   });
 
-  const navigateToCreateTask = () => {
-    router.push('/tasks/create');
+  const handleSubmitSearch = useCallback(() => {
+    setSearch(inputValue.trim());
+  }, [inputValue, setSearch]);
+
+  const navigateToCreateTeam = () => {
+    router.push('/teams/create');
   };
 
   useEffect(() => {
@@ -37,14 +41,18 @@ export function useTask() {
   }, [navigation, refetch]);
 
   return {
+    inputValue,
+    setInputValue,
+    handleSubmitSearch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     status,
-    tasks,
+    teams,
     perPage,
     setPerPage,
-    navigateToCreateTask,
+    setSearch,
+    navigateToCreateTeam,
     refetch,
     isRefetching,
   };
