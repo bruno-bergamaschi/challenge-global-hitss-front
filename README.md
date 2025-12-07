@@ -27,7 +27,7 @@
 4. Inicie o app:
 
    ```bash
-   npx expo start
+   pnpm run start
    ```
 
 No terminal, você encontrará opções para abrir o app em:
