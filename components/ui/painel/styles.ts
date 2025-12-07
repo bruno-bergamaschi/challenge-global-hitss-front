@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    // justifyContent: 'space-between',
   },
   rowIconActions: {
     display: 'flex',
@@ -20,6 +19,10 @@ export const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 50,
+    gap: 10,
+  },
+  titleContainerWithIcon: {
+    marginTop: 10,
     gap: 10,
   },
   title: {

@@ -74,7 +74,11 @@ export default function DsPainel({
           </View>
         )}
 
-        <View style={styles.titleContainer}>
+        <View
+          style={
+            iconName ? styles.titleContainerWithIcon : styles.titleContainer
+          }
+        >
           <DsText style={styles.title}>{title}</DsText>
           <DsText style={styles.subtitle}>{subtitle}</DsText>
         </View>
