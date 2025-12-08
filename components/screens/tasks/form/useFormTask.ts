@@ -1,4 +1,5 @@
-import { TaskStatus, TaskStatusType } from '@/constants/task-status';
+import { TaskStatus } from '@/constants/task-status';
+import { taskSchema, TaskSchema } from '@/schemas/task.schema';
 import {
   createTask,
   CreateTaskBody,
@@ -7,33 +8,29 @@ import {
   EditTaskBody,
   getTaskById,
 } from '@/src/services/api/tasks';
-import { Team } from '@/src/services/api/teams';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
 
-type Task = {
-  title: string;
-  description: string;
-  teams: Team[];
-  status: TaskStatusType;
-};
-
 export function useFormTask({ isEdit = false }: { isEdit?: boolean }) {
+  const queryClient = useQueryClient();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<Task>({
+  } = useForm<TaskSchema>({
+    resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      status: 'pending',
       teams: [],
+      status: 'pending',
     },
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
 
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -86,26 +83,35 @@ export function useFormTask({ isEdit = false }: { isEdit?: boolean }) {
 
       return createTask(body as CreateTaskBody);
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
   });
 
   const mutationDelete = useMutation({
     mutationFn: () => {
       return deleteTask(task!.id);
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
   });
 
-  const onSubmit = (data: Task) => {
+  const onSubmit = (data: TaskSchema) => {
     const { description, status, teams, title } = data;
-    const body: CreateTaskBody | EditTaskBody = {
-      status,
-      ...(!isEdit && {
+
+    if (isEdit) {
+      mutation.mutate({
+        status,
+      });
+    } else {
+      mutation.mutate({
+        status,
         title,
         description,
         teamIds: teams.map((team) => team.id),
-      }),
-    };
-
-    mutation.mutate(body);
+      });
+    }
   };
 
   const onDelete = () => {
@@ -116,7 +122,9 @@ export function useFormTask({ isEdit = false }: { isEdit?: boolean }) {
     if (mutation.isSuccess) {
       Toast.show({
         type: 'success',
-        text1: 'Tarefa criada com sucesso',
+        text1: isEdit
+          ? 'Tarefa editada com sucesso'
+          : 'Tarefa criada com sucesso',
       });
       router.back();
     }
@@ -127,7 +135,7 @@ export function useFormTask({ isEdit = false }: { isEdit?: boolean }) {
         text1: mutation.error.message,
       });
     }
-  }, [mutation.isSuccess, mutation.error?.message]);
+  }, [mutation.isSuccess, mutation.error?.message, isEdit]);
 
   useEffect(() => {
     if (mutationDelete.isSuccess) {

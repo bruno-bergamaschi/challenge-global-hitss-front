@@ -1,6 +1,7 @@
 import { DsDeleteModal } from '@/components/ui/delete-modal';
 import { DsText } from '@/components/ui/ds-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { DsInputError } from '@/components/ui/input-error';
 import DsPainel from '@/components/ui/painel/ds-painel';
 import { Input } from '@ui-kitten/components';
 import { Controller } from 'react-hook-form';
@@ -36,7 +37,7 @@ export function FormTaskScreen({ isEdit = false }: { isEdit?: boolean }) {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <DsPainel
@@ -85,7 +86,7 @@ export function FormTaskScreen({ isEdit = false }: { isEdit?: boolean }) {
                 )}
                 name="title"
               />
-              {errors.title && <DsText>Campo obrigatório.</DsText>}
+              {errors.title && <DsInputError text={errors.title.message} />}
             </View>
 
             <View>
@@ -114,7 +115,9 @@ export function FormTaskScreen({ isEdit = false }: { isEdit?: boolean }) {
                 )}
                 name="description"
               />
-              {errors.title && <DsText>Campo obrigatório.</DsText>}
+              {errors.description && (
+                <DsInputError text={errors.description.message} />
+              )}
             </View>
 
             <View>
@@ -165,7 +168,7 @@ export function FormTaskScreen({ isEdit = false }: { isEdit?: boolean }) {
                 )}
                 name="teams"
               />
-              {errors.teams && <DsText>Campo obrigatório.</DsText>}
+              {errors.teams && <DsInputError text={errors.teams.message} />}
             </View>
 
             <View>
@@ -183,7 +186,7 @@ export function FormTaskScreen({ isEdit = false }: { isEdit?: boolean }) {
                 )}
                 name="status"
               />
-              {errors.status && <DsText>Campo obrigatório.</DsText>}
+              {errors.status && <DsInputError text={errors.status.message} />}
             </View>
           </View>
 

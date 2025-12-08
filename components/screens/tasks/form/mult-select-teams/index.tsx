@@ -1,8 +1,7 @@
-// AsyncTeamsMultiSelect.tsx
 import { DsText } from '@/components/ui/ds-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { DsModal } from '@/components/ui/modal/ds-modal';
-import type { Team } from '@/src/services/api/teams';
+import { TeamEntitySchema } from '@/schemas/team.schema';
 import { Button, Input } from '@ui-kitten/components';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
@@ -28,7 +27,7 @@ export default function MultiSelectTeams(props: TeamsMultiSelectProps) {
     visible,
   } = useTeamsMultSelect(props);
 
-  function renderRow({ item }: { item: Team }) {
+  function renderRow({ item }: { item: TeamEntitySchema }) {
     const checked = Boolean(selected.find((s) => s.id === item.id));
     return (
       <Pressable style={styles.row} onPress={() => toggleSelect(item)}>
@@ -48,14 +47,14 @@ export default function MultiSelectTeams(props: TeamsMultiSelectProps) {
   }
 
   return (
-    <DsModal isVisible={visible} onclose={onClose}>
+    <DsModal isVisible={visible} onclose={onClose} animation="slide">
       <View style={styles.container}>
         <View style={styles.header}>
           <Input
             style={styles.input}
             placeholderTextColor="#7C7C8A"
             textStyle={styles.inputText}
-            placeholder="Pesquisar times..."
+            placeholder="Busque um time"
             value={inputValue}
             size="medium"
             accessoryRight={

@@ -55,7 +55,9 @@ export function TasksScreen() {
           }
           ListEmptyComponent={() =>
             status === 'success' && tasks.length === 0 ? (
-              <DsText>Nenhum time encontrado</DsText>
+              <DsText style={styles.emptyValue}>
+                Nenhuma tarefa encontrads
+              </DsText>
             ) : null
           }
         />

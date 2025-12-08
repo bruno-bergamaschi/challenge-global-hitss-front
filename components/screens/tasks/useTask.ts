@@ -1,13 +1,12 @@
 import { AppContext } from '@/app/(tabs)/_layout';
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
 import { getAllTasks, Task } from '@/src/services/api/tasks';
-import { router, useNavigation } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { router } from 'expo-router';
+import { useContext, useState } from 'react';
 
 export function useTask() {
   const [perPage, setPerPage] = useState(10);
   const { teamId } = useContext(AppContext);
-  const navigation = useNavigation();
 
   const {
     items: tasks,
@@ -18,7 +17,7 @@ export function useTask() {
     refetch,
     isRefetching,
   } = usePaginatedInfiniteQuery<Task, { teamId?: number | null }>({
-    queryKey: ['teams'],
+    queryKey: ['tasks'],
     fetchFn: getAllTasks,
     params: { teamId },
     perPage,
@@ -27,14 +26,6 @@ export function useTask() {
   const navigateToCreateTask = () => {
     router.push('/tasks/create');
   };
-
-  useEffect(() => {
-    const unsub = navigation.addListener('focus', () => {
-      refetch();
-    });
-
-    return unsub;
-  }, [navigation, refetch]);
 
   return {
     fetchNextPage,

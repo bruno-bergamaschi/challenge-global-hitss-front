@@ -1,34 +1,34 @@
+import { TeamSchema, teamSchema } from '@/schemas/team.schema';
 import { createTeam, CreateTeamBody } from '@/src/services/api/teams';
-import { useMutation } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
 
-type Team = {
-  name: string;
-  color: string;
-};
-
 export function useCreateTeam() {
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Team>({
-    defaultValues: {
-      name: '',
-      color: '',
-    },
+  } = useForm<TeamSchema>({
+    resolver: zodResolver(teamSchema),
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
   const [isVisibileColorPickerModal, setIsVisibleColorPickerModal] =
     useState(false);
 
   const mutation = useMutation({
     mutationFn: (body: CreateTeamBody) => createTeam(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['teams'] });
+    },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: TeamSchema) => {
     mutation.mutate(data);
   };
 

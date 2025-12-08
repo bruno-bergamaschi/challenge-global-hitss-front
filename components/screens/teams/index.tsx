@@ -60,7 +60,7 @@ export function TeamsScreen() {
           }
           ListEmptyComponent={() =>
             status === 'success' && teams.length === 0 ? (
-              <DsText>Nenhum time encontrado</DsText>
+              <DsText style={styles.emptyValue}>Nenhum time encontrado</DsText>
             ) : null
           }
         />

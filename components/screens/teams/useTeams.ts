@@ -1,13 +1,12 @@
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
 import { getAllTeams, Team } from '@/src/services/api/teams';
-import { router, useNavigation } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
 
 export function useTeams() {
   const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
   const [perPage, setPerPage] = useState(10);
-  const navigation = useNavigation();
 
   const {
     items: teams,
@@ -31,14 +30,6 @@ export function useTeams() {
   const navigateToCreateTeam = () => {
     router.push('/teams/create');
   };
-
-  useEffect(() => {
-    const unsub = navigation.addListener('focus', () => {
-      refetch();
-    });
-
-    return unsub;
-  }, [navigation, refetch]);
 
   return {
     inputValue,

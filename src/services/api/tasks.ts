@@ -1,5 +1,6 @@
+import { TaskEntitySchema } from '@/schemas/task.schema';
+import { TeamEntitySchema } from '@/schemas/team.schema';
 import { api } from './client';
-import { Team } from './teams';
 
 interface IGetAllTasks {
   pageParam?: number;
@@ -7,18 +8,8 @@ interface IGetAllTasks {
   teamId?: number | null;
 }
 
-type TaskStatus = 'pending' | 'in_progress' | 'concluded';
-
-export type Task = {
-  id: number;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  teams: Team[];
-};
-
 type GetAllTasksResponse = {
-  results: Task[];
+  results: TeamEntitySchema[];
   totalCount: number;
 };
 
@@ -38,15 +29,18 @@ export async function getAllTasks({
   return data;
 }
 
-export type CreateTaskBody = Pick<Task, 'description' | 'status' | 'title'> & {
-  teamIds: number[];
-};
-
 export async function getTaskById(id: number) {
-  const { data } = await api.get<Task>(`/tasks/${id}`);
+  const { data } = await api.get<TaskEntitySchema>(`/tasks/${id}`);
 
   return data;
 }
+
+export type CreateTaskBody = Pick<
+  TaskEntitySchema,
+  'description' | 'status' | 'title'
+> & {
+  teamIds: number[];
+};
 
 export async function createTask(body: CreateTaskBody) {
   const response = await api.post('/tasks', body);
@@ -54,7 +48,7 @@ export async function createTask(body: CreateTaskBody) {
   return response?.data;
 }
 
-export type EditTaskBody = Pick<Task, 'status'>;
+export type EditTaskBody = Pick<TaskEntitySchema, 'status'>;
 
 export async function editTask(body: EditTaskBody, id: number) {
   const response = await api.patch(`/tasks/${id}`, body);
