@@ -1,6 +1,6 @@
 import { AppContext } from '@/app/(tabs)/_layout';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Team } from '@/src/services/api/teams';
+import { TeamEntitySchema } from '@/schemas/team.schema';
 import { Card } from '@ui-kitten/components';
 import { router } from 'expo-router';
 import { useContext } from 'react';
@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import { DsText } from '../../../ui/ds-text';
 import { styles } from './styles';
 
-export function CardTeam({ team }: { team: Team }) {
+export function CardTeam({ team }: { team: TeamEntitySchema }) {
   const { setTeamId } = useContext(AppContext);
 
   const navigateToTasks = () => {

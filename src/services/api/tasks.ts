@@ -1,5 +1,4 @@
 import { TaskEntitySchema } from '@/schemas/task.schema';
-import { TeamEntitySchema } from '@/schemas/team.schema';
 import { api } from './client';
 
 interface IGetAllTasks {
@@ -8,8 +7,8 @@ interface IGetAllTasks {
   teamId?: number | null;
 }
 
-type GetAllTasksResponse = {
-  results: TeamEntitySchema[];
+export type GetAllTasksResponse = {
+  results: TaskEntitySchema[];
   totalCount: number;
 };
 

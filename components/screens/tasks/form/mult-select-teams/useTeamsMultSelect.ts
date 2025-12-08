@@ -1,12 +1,13 @@
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
-import { getAllTeams, Team } from '@/src/services/api/teams';
+import { TeamEntitySchema } from '@/schemas/team.schema';
+import { getAllTeams } from '@/src/services/api/teams';
 import { useCallback, useEffect, useState } from 'react';
 
 export type TeamsMultiSelectProps = {
   visible: boolean;
   onClose: () => void;
-  onConfirm: (selected: Team[]) => void;
-  initialSelected?: Team[];
+  onConfirm: (selected: TeamEntitySchema[]) => void;
+  initialSelected?: TeamEntitySchema[];
   perPage?: number;
 };
 
@@ -19,7 +20,7 @@ export function useTeamsMultSelect({
 }: TeamsMultiSelectProps) {
   const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<Team[]>(initialSelected);
+  const [selected, setSelected] = useState<TeamEntitySchema[]>(initialSelected);
 
   useEffect(() => {
     if (!visible) {
@@ -41,14 +42,14 @@ export function useTeamsMultSelect({
     hasNextPage,
     isFetchingNextPage,
     status,
-  } = usePaginatedInfiniteQuery<Team, { search?: string }>({
+  } = usePaginatedInfiniteQuery<TeamEntitySchema, { search?: string }>({
     queryKey: ['teams'],
     fetchFn: getAllTeams,
     params: { search },
     perPage,
   });
 
-  function toggleSelect(item: Team) {
+  function toggleSelect(item: TeamEntitySchema) {
     setSelected((prev) => {
       const exists = prev.find((p) => p.id === item.id);
       if (exists) return prev.filter((p) => p.id !== item.id);

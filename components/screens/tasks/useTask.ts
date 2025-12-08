@@ -1,6 +1,7 @@
 import { AppContext } from '@/app/(tabs)/_layout';
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
-import { getAllTasks, Task } from '@/src/services/api/tasks';
+import { TaskEntitySchema } from '@/schemas/task.schema';
+import { getAllTasks } from '@/src/services/api/tasks';
 import { router } from 'expo-router';
 import { useContext, useState } from 'react';
 
@@ -16,7 +17,7 @@ export function useTask() {
     status,
     refetch,
     isRefetching,
-  } = usePaginatedInfiniteQuery<Task, { teamId?: number | null }>({
+  } = usePaginatedInfiniteQuery<TaskEntitySchema, { teamId?: number | null }>({
     queryKey: ['tasks'],
     fetchFn: getAllTasks,
     params: { teamId },

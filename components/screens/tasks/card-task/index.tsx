@@ -1,4 +1,4 @@
-import { Task } from '@/src/services/api/tasks';
+import { TaskEntitySchema } from '@/schemas/task.schema';
 import { Card } from '@ui-kitten/components';
 import { router } from 'expo-router';
 import { View } from 'react-native';
@@ -6,7 +6,7 @@ import { DsText } from '../../../ui/ds-text';
 import { Chip } from './chip';
 import { styles } from './styles';
 
-export function CardTask({ task }: { task: Task }) {
+export function CardTask({ task }: { task: TaskEntitySchema }) {
   return (
     <Card
       appearance="filled"

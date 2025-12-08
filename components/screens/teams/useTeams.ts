@@ -1,5 +1,6 @@
 import { usePaginatedInfiniteQuery } from '@/hooks/use-paginated-infinite-query-options';
-import { getAllTeams, Team } from '@/src/services/api/teams';
+import { TeamEntitySchema } from '@/schemas/team.schema';
+import { getAllTeams } from '@/src/services/api/teams';
 import { router } from 'expo-router';
 import { useCallback, useState } from 'react';
 
@@ -16,7 +17,7 @@ export function useTeams() {
     status,
     refetch,
     isRefetching,
-  } = usePaginatedInfiniteQuery<Team, { search?: string }>({
+  } = usePaginatedInfiniteQuery<TeamEntitySchema, { search?: string }>({
     queryKey: ['teams'],
     fetchFn: getAllTeams,
     params: { search },
